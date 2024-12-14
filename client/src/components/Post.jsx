@@ -32,7 +32,7 @@ const Post = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         const newPost = { username, comment, date, selectedBook };
-        axios.post('http://localhost:3002/post/post', newPost)
+        axios.post('http://localhost:3002/post/posts', newPost)
             .then(res => { 
                 if (res.data.submitted) {
                     addPost(newPost); // Update the context with the new post

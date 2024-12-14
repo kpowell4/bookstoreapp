@@ -14,13 +14,15 @@ const Login = ({ setRole }) => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
+        console.log('Login request payload:', { username, password, role: selectedRole }); // Log the request payload
 
         axios.post('http://localhost:3002/auth/login', { username, password, role: selectedRole })
             .then(res => {
+                console.log('Login response:', res.data); // Log the response for debugging
                 if (res.data.login && res.data.role === 'admin') {
                     setRole('admin');
                     navigate('/dashboard');
-                } else if (res.data.login && res.data.role === 'student') {
+                } else if (res.data.login && res.data.role === 'students') {
                     setRole('student');
                     navigate('/');
                 } else {
@@ -29,7 +31,7 @@ const Login = ({ setRole }) => {
             })
             .catch(err => {
                 setError('An error occurred during login. Please try again later.');
-                console.error('Login error:', err);
+                console.error('Login error:', err); // Log the error for debugging
             });
     };
 
@@ -84,6 +86,7 @@ const Login = ({ setRole }) => {
 };
 
 export default Login;
+
 
 
 

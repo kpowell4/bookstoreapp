@@ -8,11 +8,10 @@ import { studentRouter } from './routes/student.js';
 import { bookRouter } from './routes/book.js';
 import { helpRouter } from './routes/help.js';
 import { postRouter } from './routes/post.js';
-import { verifyAdmin } from './routes/auth.js';
 
+dotenv.config();
 
 const app = express();
-dotenv.config();
 
 // Middleware
 app.use(express.json());
@@ -23,13 +22,11 @@ app.use(cors({
 app.use(cookieParser());
 
 // Use Routes
-app.use('/auth', AdminRouter,verifyAdmin);
-app.use('/student', studentRouter);
+app.use('/auth', AdminRouter);
+app.use('/student', studentRouter);  // Removed verifyAdmin from here to avoid restricting access to student routes
 app.use('/book', bookRouter);
 app.use('/help', helpRouter);
 app.use('/post', postRouter);
-
-
 
 // Error handling middleware (optional)
 app.use((err, req, res, next) => {
@@ -38,6 +35,6 @@ app.use((err, req, res, next) => {
 });
 
 // Start Server
-app.listen(process.env.PORT, () => {
-    console.log(`Server is running on port ${process.env.PORT}`);
+app.listen(process.env.PORT || 3002, () => {
+    console.log(`Server is running on port ${process.env.PORT || 3002}`);
 });

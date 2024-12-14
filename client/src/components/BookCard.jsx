@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { useNavigate } from 'react-router-dom';
-import { CartContext } from './MyBooks'; // Import CartContext
-import '../css/BookCard.css'; // Import CSS
+import { CartContext } from './MyBooks'; 
+import '../css/BookCard.css'; 
 
 const BookCard = ({ book, showBorrowButton = true }) => {
     const { addToCart } = useContext(CartContext);
@@ -9,8 +9,16 @@ const BookCard = ({ book, showBorrowButton = true }) => {
 
     const handleAddToCart = (event) => {
         event.stopPropagation(); // Prevent navigation to book details when clicking the button
-        addToCart(book);
-        navigate('/mybooks'); // Navigate to "My Books" page
+
+        // Check if the user is logged in
+        const token = document.cookie.split(';').find(cookie => cookie.trim().startsWith('token='));
+
+        if (!token) {
+            navigate('/login'); // Redirect to login page if not logged in
+        } else {
+            addToCart(book);
+            navigate('/mybooks'); // Navigate to "My Books" page
+        }
     };
 
     const handleCardClick = () => {

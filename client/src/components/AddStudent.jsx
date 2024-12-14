@@ -10,25 +10,31 @@ const AddStudent = () => {
     const [grade, setGrade] = useState('');
     const [status, setStatus] = useState('');
     const [password, setPassword] = useState('');
+    
     const navigate = useNavigate();
     const { setStudents } = useContext(StudentContext);
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        axios.post('http://localhost:3002/student/register', { username, studentid, grade, status, password })
+        const role = 'student'; // Set role to 'student'
+        console.log('Register request payload:', { username, studentid, grade, status, password, role });
+
+        axios.post('http://localhost:3002/student/register', { username, studentid, grade, status, password, role })
             .then(res => { 
+                console.log('Register response:', res.data);
                 if(res.data.registered) {
-                    axios.get('http://localhost:3002/student/students')
+                    axios.get('http://localhost:3002/student/student')
                         .then(res => {
                             setStudents(res.data);
                             console.log(res.data);
                         })
                         .catch(err => console.error(err));
                     navigate('/dashboard');
+                } else {
+                    console.error('Registration failed:', res.data.message);
                 }
-                console.log(res);
             })
-            .catch(err => console.log(err));
+            .catch(err => console.error('Error in registration request:', err));
     };
 
     const handleCancel = () => {
@@ -77,6 +83,7 @@ const AddStudent = () => {
             </form>
         </div>
     );
-}
+};
 
 export default AddStudent;
+

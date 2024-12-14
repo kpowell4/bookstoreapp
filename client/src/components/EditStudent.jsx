@@ -9,6 +9,8 @@ const EditStudent = () => {
     const [username, setUsername] = useState('');
     const [grade, setGrade] = useState('');
     const [status, setStatus] = useState('');
+    const [borrowed, setBorrowed] = useState('');
+    const [returned, setReturned] = useState('');
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -18,13 +20,15 @@ const EditStudent = () => {
                 setUsername(res.data.username);
                 setGrade(res.data.grade);
                 setStatus(res.data.status);
+                setBorrowed(res.data.borrowed);
+                setReturned(res.data.returned);
             })
             .catch(err => console.error(err));
     }, [id]);
 
     const handleUpdate = (e) => {
         e.preventDefault();
-        axios.put(`http://localhost:3002/student/students/${id}`, { username, grade, status })
+        axios.put(`http://localhost:3002/student/students/${id}`, { username, grade, status, borrowed, returned })
             .then(res => {
                 if (res.data.updated) {
                     navigate('/dashboard');
@@ -75,6 +79,18 @@ const EditStudent = () => {
                     <label htmlFor="status">Activity Status:</label>
                     <input type="text" id="status" name="status" value={status}
                     onChange={(e) => setStatus(e.target.value)} />
+                </div>
+
+                <div className="form-group">
+                    <label htmlFor="borrowed">Books Borrowed:</label>
+                    <input type="text" id="borrowed" name="borrowed" value={borrowed}
+                    onChange={(e) => setBorrowed(e.target.value)} />
+                </div>
+
+                <div className="form-group">
+                    <label htmlFor="returned">Books Returned:</label>
+                    <input type="text" id="returned" name="returned" value={returned}
+                    onChange={(e) => setReturned(e.target.value)} />
                 </div>
 
                 <div className="form-group buttons">

@@ -8,6 +8,12 @@ import { Student } from '../models/Student.js';
 router.post('/login', async (req, res) => {
     try {
         const { username, password, role } = req.body;
+        console.log('Login request payload:', req.body); // Log the request payload
+
+        if (!username || !password || !role) {
+            return res.status(400).json({ message: "Missing required fields" });
+        }
+
         if (role === 'admin') {
             const admin = await Admin.findOne({ username });
             if (!admin) {
@@ -22,6 +28,7 @@ router.post('/login', async (req, res) => {
             return res.json({ login: true, role: 'admin' });
         } else if (role === 'student') {
             const student = await Student.findOne({ username });
+            console.log('Student query result:', student); // Log the query result
             if (!student) {
                 return res.status(400).json({ message: "Student not registered" });
             }
@@ -36,6 +43,7 @@ router.post('/login', async (req, res) => {
             return res.status(400).json({ message: "Invalid role" });
         }
     } catch (er) {
+        console.error('Server error:', er); // Log the error for debugging
         res.status(500).json({ message: "Server error", error: er });
     }
 });

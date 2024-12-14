@@ -7,22 +7,21 @@ import { PostContext } from './PostContext'; // Import PostContext
 const Forum = () => {
     const { posts, setPosts } = useContext(PostContext);
     const navigate = useNavigate();
+
     useEffect(() => {
-        axios.get('http://localhost:3002/post/posts')
+        axios.get('http://localhost:3002/post/post')
             .then(res => {
+                console.log('API response:', res.data);
                 setPosts(res.data);
-                console.log(res.data);
             })
-            .catch(err => console.error(err));
+            .catch(err => console.error('API error:', err));
     }, [setPosts]);
 
     return (
         <div className="dashboard">
-            
             <div className="header-box">
                 <h1>Forum</h1>
                 <h2 className='dashboard-text'>Here you can review and manage all the posts made by students.</h2>
-                
             </div>
             <table>
                 <thead>
@@ -35,14 +34,14 @@ const Forum = () => {
                 </thead>
                 <tbody>
                     {posts.map((post) => (
-                        <tr key={post.id}>
+                        <tr key={post._id}> {/* Assuming _id is the identifier */}
                             <td>{post.username}</td>
-                            <td>{post.date}</td>
+                            <td>{new Date(post.date).toLocaleDateString()}</td> {/* Formatting the date */}
                             <td>{post.selectedBook}</td>
                             <td>
                                 <button onClick={() => {
-                                    console.log(`Navigating to postdetails with ID: ${post.id}`);
-                                    navigate(`/postdetails/${post.id}`);
+                                    console.log(`Navigating to postdetails with ID: ${post._id}`);
+                                    navigate(`/postdetails/${post._id}`);
                                 }}>View Details</button>
                             </td>
                         </tr>

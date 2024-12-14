@@ -1,4 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import BookCard from './BookCard';
 import '../css/Home.css';
@@ -8,6 +9,7 @@ const Home = () => {
     const scrollRef = useRef(null);
     const [books, setBooks] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
+    const navigate = useNavigate();
 
     const scrollLeft = () => {
         if (scrollRef.current) {
@@ -39,6 +41,17 @@ const Home = () => {
         book.level.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
+    const handleBorrowClick = (bookId) => {
+        const token = document.cookie.split(';').find(cookie => cookie.trim().startsWith('token='));
+        
+        if (!token) {
+            navigate('/login'); // Redirect to login page if not logged in
+        } else {
+            // Proceed with borrowing the book
+            console.log(`Borrow book with ID: ${bookId}`);
+        }
+    };
+
     return (
         <div className="hero">
             <div className="search-bar">
@@ -59,7 +72,7 @@ const Home = () => {
                         <button className="scroll-button left" onClick={scrollLeft}>&lt;</button>
                         <div className="book-list" ref={scrollRef}>
                             {filteredBooks.slice(0, 4).map((book, index) => (
-                                <BookCard key={index} book={book} />
+                                <BookCard key={index} book={book} onBorrowClick={handleBorrowClick} />
                             ))}
                         </div>
                         <button className="scroll-button right" onClick={scrollRight}>&gt;</button>
@@ -69,7 +82,6 @@ const Home = () => {
                 <section className="learning-resource">
                     <h2>Learning Resource</h2>
                     <div className="resource-list">
-                       
                         <ul className="resource-links">
                             <li><a href="https://www.khanacademy.org/">Khan Academy</a></li>
                             <li><a href="https://www.coursera.org/">Coursera</a></li>
@@ -78,7 +90,6 @@ const Home = () => {
                     </div>
                 </section>
             </main>
-            
         </div>
     );
 };

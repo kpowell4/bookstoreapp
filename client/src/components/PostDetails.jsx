@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import '../css/PostDetails.css'; // Ensure you create this CSS file for styling
+import '../css/PostDetails.css'; 
 
 const PostDetails = () => {
     const { id } = useParams();
